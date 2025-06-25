@@ -1,0 +1,69 @@
+# Cursor Rules for Hanover Perplexity Clone (TypeScript)
+
+## COMPONENT STRUCTURE
+- Break UI into small, reusable components:
+  - <SearchInput />
+  - <AnswerDisplay />
+  - <CitationList />
+- Co-locate styles using Tailwind in component files.
+- Always type props explicitly using interfaces.
+
+## TYPE SAFETY
+- Define API response types upfront:
+```ts
+interface SearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+}
+
+interface LLMResponse {
+  answer: string;
+  sources: string[];
+}
+```
+- Never use `any` — if unknown, use `unknown` and narrow it.
+
+## DATA FETCHING
+- Abstract API logic into a separate module (e.g., `lib/api.ts`)
+- Use async/await and handle errors with `try/catch`.
+- Show a fallback message on UI if an error occurs.
+
+## LLM PROMPTING
+- Provide clear, structured context to the LLM:
+```ts
+const prompt = \`
+Use the following search results to answer the question.
+Return the answer in markdown format. Cite sources using [1], [2], etc.
+
+Search Results:
+${results.map((r, i) => \`[\${i + 1}] \${r.snippet} (\${r.link})\`).join("\n")}
+
+Question: \${userQuery}
+\`;
+```
+
+## UI/UX POLISH
+- Show loading spinners for both search and LLM phases.
+- Use Tailwind for layout, spacing, and visual hierarchy.
+- Render citations below the answer or as footnotes.
+- Display link previews or expandable citation views (optional).
+
+## CODE ORGANIZATION
+- Use folders:
+  - `/components` for UI components
+  - `/lib` for API logic
+  - `/types` for global types
+  - `/pages` for routes (if using Next.js)
+- Export functions and types cleanly from modules.
+
+## OPTIONAL FEATURES (IF TIME ALLOWS)
+- Save recent queries using localStorage
+- Add voice input for search
+- Theme toggle (light/dark mode)
+- API usage counter to avoid hitting limits
+
+## SUBMISSION REMINDERS
+- Include a short 60–120 second demo video (screen recording with voice)
+- Submit GitHub repo or ZIP and email both Nick and Chris
+- Clean up console.logs before final push
